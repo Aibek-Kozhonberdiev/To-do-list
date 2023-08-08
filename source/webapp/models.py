@@ -8,6 +8,7 @@ class Task(models.Model):
         ('done', 'Сделано')
     ]
 
+    title = models.CharField(max_length=50, null=False, help_text='Название задания')
     description = models.TextField(max_length=5000, null=False)
     status = models.CharField(max_length=50, choices=status_choices, default='new')
     date_of_completion = models.DateField(null=True)

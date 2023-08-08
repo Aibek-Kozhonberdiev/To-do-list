@@ -1,11 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Список задач</title>
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
-    
+    <a href="task/add">Записать задачу</a>
+    {% for tasks in task %}
+    <h3> {{ tasks.description }} <h3>
+        <p>Дата завершения: {{ tasks.date_of_completion }}</p>
+        {% for status_id, status_description in status %}
+            {% if status_id == tasks.status %}
+                <p>Статус: {{ status_description }}</p>
+            {% endif %}
+        {% endfor %}
+    <a href="article/?pk={{ tasks.pk }}">Подробнее</a>
+    {% endfor %}
 </body>
 </html>

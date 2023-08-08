@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить задачу</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    {% if error == True %}
+    <p class="message">Вы не заполнили таблицу</p>
+    {% endif %}
+    <h1>Создать задачу</h1>
+    <form action="/task/add/" method="post">
+        {% csrf_token %}
+        <label>Заголовок:</label><br />
+        <input type="text" name="title" value="{{ title }}"/><br />
+        <label>Текст:</label><br />
+        <textarea name="content">{{ content }}</textarea><br />
+        <label>Статус:</label><br />
+        <textarea name="status">new</textarea><br />
+        <label>Дата выполнения:</label><br />
+        <input type="date" name="date_of_completion"/><br />
+        <br />
+        <input type="submit" value="Отправить"/>
+    </form>
+    <a href="/">На главную</a>
+</body>
+</html>
