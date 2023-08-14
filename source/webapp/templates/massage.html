@@ -1,0 +1,12 @@
+{% extends 'config.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+<h1 class="message">{{ message }}</h1>
+<p class="button">
+<a class="btn btn-primary" href="{% url 'main' %}">На главную</a>
+</p>
+
+{% endblock %}

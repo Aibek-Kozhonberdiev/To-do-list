@@ -1,9 +1,9 @@
-from django.shortcuts import render, HttpResponse
-from django.core.exceptions import ValidationError
+from django.shortcuts import render, redirect
 from .models import Task
 
 def index(request):
-    task = Task.objects.order_by('-date_of_completion')
+    task = Task.objects.all().order_by('-date_of_completion')
+    # task = Task.objects.order_by('-date_of_completion')
     status = Task().status_choices
     context = {'task': task, 'status': status}
     return render(request, 'index.html', context)
@@ -11,21 +11,51 @@ def index(request):
 def article_task(request):
     pk = request.GET.get('pk')
     task = Task.objects.get(pk=pk)
-    status = Task.status_choices
+    status = Task().status_choices
+
+    if request.POST.get('delete'):
+        Task.objects.filter(id=task.id).delete()
+        return render(request, 'massage.html', {'title': 'Удаление', 'message': 'Задача успешно удалена'})
+
     return render(request, 'task_view.html', {'task': task, 'status': status})
 
-def create_task(request):
-    if request.method == 'GET':
-        return render(request, 'create_task.html')
+def editing_task(request):
+    pk = request.GET.get('pk')
+    task = Task.objects.get(pk=pk)
 
-    else:
+    if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-        status = request.POST.get('status')
-        date = request.POST.get('date_of_completion')
-        try:
-            Task.objects.create(title=title, description=content, status=status, date_of_completion=date)
-            return HttpResponse('<h1>Задача успешно записана<h1/>\n<a href="/">На главную</a>')
-        except ValidationError: 
-            context = {'title': title, 'content': content, 'error': True}
-            return render(request, 'create_task.html', context)
+        status = request.POST.get('status', 'new')
+        date_of_completion = request.POST.get('date_of_completion')
+
+        if title.strip() and content.strip():
+            if date_of_completion:
+                new_task = Task.objects.filter(id=task.id).update(title=title, description=content, status=status, date_of_completion=date_of_completion)
+            else:
+                new_task = Task.objects.filter(id=task.id).update(title=title, description=content, status=status)
+
+            return render(request, 'massage.html', {'pk': task.pk, 'title': 'Обновление задачи', 'message': 'Задача успешно обновлена'})
+
+        return render(request, 'editing.html', {'pk': task.pk, 'error': True, 'title': title, 'content': content, 'status': status, 'date_of_completion': date_of_completion})
+
+    return render(request, 'editing.html', {'task': task, 'pk': task.pk})
+
+def create_task(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        status = request.POST.get('status', 'new')
+        date_of_completion = request.POST.get('date_of_completion')
+
+        if title.strip() and content.strip():
+            if date_of_completion:
+                new_task = Task.objects.create(title=title, description=content, status=status, date_of_completion=date_of_completion)
+            else:
+                new_task = Task.objects.create(title=title, description=content, status=status)
+
+            return render(request, 'massage.html', {'title': 'Добавить задачу', 'message': 'Задача успешно добавлена'})
+
+        return render(request, 'create_task.html', {'error': True, 'title': title, 'content': content})
+
+    return render(request, 'create_task.html')

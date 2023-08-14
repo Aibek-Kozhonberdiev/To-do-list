@@ -1,11 +1,12 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends 'config.html' %}
+
+{% block title %}Просмотр задач{% endblock %}
+
+{% block content %}
+    <div class="button">
+    <a class="btn btn-primary" href="{% url 'main' %}">На главную</a>
+    </div>
+    <div class="alert alert-warning">
     <p> {{ task.title }} </p>
     <p> {{ task.description }} </p>
     <p> Дата завершения: {{ task.date_of_completion }} </p>    
@@ -14,6 +15,12 @@
     <p>Статус: {{ status_description }}</p>
     {% endif %}
     {% endfor %}
-    <a href="/">На главную</a>
-</body>
-</html>
+    <div class="button">
+    <a type="button" class="btn btn-success" href="editing/?pk={{ task.pk }}">Редактировать</a>
+    <form method="POST">
+    {% csrf_token %}
+    <input class="btn btn-danger" type="submit" value="Удалить" name="delete"/>
+    </form>
+    </div>
+    </div>
+{% endblock %}

@@ -1,27 +1,29 @@
 {% extends 'config.html' %}
 
-{% block title %}Добавить задачу{% endblock %}
+{% block title %}Редактирование{% endblock %}
 
 {% block content %}
-    <div class="button">
+
+<div class="button">
     <a class="btn btn-primary btn-lg btn-block" href="{% url 'main' %}">На главную</a>
     </div>
     <div class="alert alert-warning">
     {% if error == True %}
     <p class="text-danger">Вы не заполнили таблицу</p>
     {% endif %}
-    <form action="/task/add/" method="post">
+    <form action="/task/editing/?pk={{ pk }}" method="post">
         {% csrf_token %}
         <label>Заголовок:</label><br />
-        <input type="text" name="title" value="{{ title }}"/><br />
+        <input type="text" name="title" value="{{ task.title }}{{ title }}"/><br />
         <label>Текст:</label><br />
-        <textarea name="content">{{ content }}</textarea><br />
+        <textarea name="content">{{ task.description }}{{ content }}</textarea><br />
         <label>Статус:</label><br />
-        <textarea name="status">new</textarea><br />
+        <textarea name="status">{{ task.status }}{{ status }}</textarea><br />
         <label>Дата выполнения:</label><br />
-        <input type="date" name="date_of_completion"/><br />
+        <input type="date" name="date_of_completion" value="{{ task.date_of_completion }}{{ date_of_completion }}"/><br />
         <br />
         <input class="btn btn-warning" type="submit" value="Отправить"/>
     </form>
-    </div>
+</div>
+
 {% endblock %}

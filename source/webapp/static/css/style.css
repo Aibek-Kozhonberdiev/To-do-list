@@ -1,7 +1,29 @@
-.message {
-    color: red;
+body {
+    background: #2c2c2c;
 }
 
-p {
-    color: red;
+.message {
+    color: greenyellow;
+    margin-top: 20%;
+    text-align: center;
+}
+
+.button {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-warning {
+    display: flex;
+    justify-content: center; 
+}
+
+.alert-warning {
+    justify-content: center; 
+    float: left;
+    clear: both;
+    width: 515px;
+    margin: 20px 33%;
+    /* text-align: left; */
 }
