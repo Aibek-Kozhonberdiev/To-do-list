@@ -18,7 +18,6 @@
         <label>Текст:</label><br />
         <textarea name="content">{{ task.description }}{{ content }}</textarea><br />
         <label>Статус:</label><br />
-        <br>
         <select name="status">
             {% for value, status in statuses %}
             <option value="{{ value }}">{{ status }}</option>
