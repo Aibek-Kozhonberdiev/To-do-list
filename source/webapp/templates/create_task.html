@@ -17,7 +17,14 @@
         <label>Текст:</label><br />
         <textarea name="content">{{ content }}</textarea><br />
         <label>Статус:</label><br />
-        <textarea name="status">new</textarea><br />
+        <br>
+        <select name="status">
+            {% for value, status in statuses %}
+            <option value="{{ value }}">{{ status }}</option>
+            {{ status }}
+            {% endfor %}
+        </select>
+        <br>
         <label>Дата выполнения:</label><br />
         <input type="date" name="date_of_completion"/><br />
         <br />

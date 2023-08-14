@@ -14,7 +14,7 @@ class Task(models.Model):
     date_of_completion = models.DateField(null=True, blank=True, default=None)
 
     def __str__(self) -> str:
-        return f'{self.id}. Cтатус: {self.status}'
+        return f'{self.title}'
 
     class Meta:
         db_table = 'To-do list'

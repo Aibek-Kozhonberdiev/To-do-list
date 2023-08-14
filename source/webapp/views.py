@@ -1,23 +1,22 @@
 from django.shortcuts import render, redirect
 from .models import Task
 
+STATUS = Task().status_choices
+
 def index(request):
     task = Task.objects.all().order_by('-date_of_completion')
-    # task = Task.objects.order_by('-date_of_completion')
-    status = Task().status_choices
-    context = {'task': task, 'status': status}
+    context = {'task': task, 'status': STATUS}
     return render(request, 'index.html', context)
 
 def article_task(request):
     pk = request.GET.get('pk')
     task = Task.objects.get(pk=pk)
-    status = Task().status_choices
 
     if request.POST.get('delete'):
         Task.objects.filter(id=task.id).delete()
         return render(request, 'massage.html', {'title': 'Удаление', 'message': 'Задача успешно удалена'})
 
-    return render(request, 'task_view.html', {'task': task, 'status': status})
+    return render(request, 'task_view.html', {'task': task, 'status': STATUS})
 
 def editing_task(request):
     pk = request.GET.get('pk')
@@ -37,9 +36,9 @@ def editing_task(request):
 
             return render(request, 'massage.html', {'pk': task.pk, 'title': 'Обновление задачи', 'message': 'Задача успешно обновлена'})
 
-        return render(request, 'editing.html', {'pk': task.pk, 'error': True, 'title': title, 'content': content, 'status': status, 'date_of_completion': date_of_completion})
+        return render(request, 'editing.html', {'pk': task.pk, 'error': True, 'title': title, 'content': content, 'status': status, 'date_of_completion': date_of_completion, 'statuses': STATUS})
 
-    return render(request, 'editing.html', {'task': task, 'pk': task.pk})
+    return render(request, 'editing.html', {'task': task, 'pk': task.pk, 'statuses': STATUS})
 
 def create_task(request):
     if request.method == 'POST':
@@ -56,6 +55,6 @@ def create_task(request):
 
             return render(request, 'massage.html', {'title': 'Добавить задачу', 'message': 'Задача успешно добавлена'})
 
-        return render(request, 'create_task.html', {'error': True, 'title': title, 'content': content})
+        return render(request, 'create_task.html', {'error': True, 'title': title, 'content': content, 'statuses': STATUS})
 
-    return render(request, 'create_task.html')
+    return render(request, 'create_task.html', {'statuses': STATUS})
